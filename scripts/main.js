@@ -43,7 +43,11 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
     if (get('chrome_hack')) {
         document.getElementById('chrome_hack').checked = true;
     }
+    var old_arrays = [];
     var min_val = -100, max_val = 100, diff = max_val - min_val, a = [], b = [], r = [];
+    old_arrays.push(a);
+    old_arrays.push(b);
+    old_arrays.push(r);
     print('Beginning testing with ' + elems + ' elements.');
     print2('Testing mathjs (newest version of gladius math library)');
     if (get('chrome_hack')) {
@@ -75,6 +79,9 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
 
     print2('Testing old gladius/math library (before the refactor to mathjs)');
     a = [], b = [], r = [];
+    old_arrays.push(a);
+    old_arrays.push(b);
+    old_arrays.push(r);
     for (var i = 0; i < elems; ++i) {
         a.push(g.Vector3(
             min_val + Math.random() * diff,
@@ -112,6 +119,9 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
 
     print2('Testing in-house add1 function, checks for existence of result object, creates if required, returns result...');
     a = [], b = [], r = [];
+    old_arrays.push(a);
+    old_arrays.push(b);
+    old_arrays.push(r);
     for (var i = 0; i < elems; ++i) {
         a.push([
             min_val + Math.random() * diff,
@@ -134,6 +144,9 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
 
     print2('Testing in-house add2 function, does not create result, does not return...');
     a = [], b = [], r = [];
+    old_arrays.push(a);
+    old_arrays.push(b);
+    old_arrays.push(r);
     for (var i = 0; i < elems; ++i) {
         a.push([
             min_val + Math.random() * diff,
