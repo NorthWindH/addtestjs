@@ -1,4 +1,4 @@
-require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect){
+require(['math.min', 'gladius', 'THREE.Vector3', 'browser_detect'], function(m, g, t, browser_detect){
     var form = document.getElementsByTagName('form')[0];
     function print(text) {
       var elem = document.createElement("h1");
@@ -49,7 +49,7 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
     old_arrays.push(b);
     old_arrays.push(r);
     print('Beginning testing with ' + elems + ' elements.');
-    print2('Testing mathjs (newest version of gladius math library)');
+    print2('(m) Testing mathjs (newest version of gladius math library)');
     if (get('chrome_hack')) {
         print2("Chrome hack active, skipping mathjs test...");
         m_start_clock = 0;
@@ -77,7 +77,7 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
         m_end_clock = Date.now();
     }
 
-    print2('Testing old gladius/math library (before the refactor to mathjs)');
+    print2('(g) Testing old gladius/math library (before the refactor to mathjs)');
     a = [], b = [], r = [];
     old_arrays.push(a);
     old_arrays.push(b);
@@ -103,6 +103,31 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
     }
     g_end_clock = Date.now();
 
+    print2('(t) Testing 3js vector3...');
+    a = [], b = [], r = [];
+    old_arrays.push(a);
+    old_arrays.push(b);
+    old_arrays.push(r);
+    for (var i = 0; i < elems; ++i) {
+        a.push(new t(
+            min_val + Math.random() * diff,
+            min_val + Math.random() * diff,
+            min_val + Math.random() * diff
+        ));
+        b.push(new t(
+            min_val + Math.random() * diff,
+            min_val + Math.random() * diff,
+            min_val + Math.random() * diff
+        ));
+        r.push(new t(0,0,0));
+    }
+
+    t_start_clock = Date.now();
+    for (var i = 0; i < elems; ++i) {
+        r[i].add(a[i], b[i]);
+    }
+    t_end_clock = Date.now();
+
     add = function(a, b, c) {
         c = c || [];
         c[0] = a[0] + b[0];
@@ -117,7 +142,7 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
         c[2] = a[2] + b[2];
     };
 
-    print2('Testing in-house add1 function, checks for existence of result object, creates if required, returns result...');
+    print2('(a1) Testing in-house add1 function, checks for existence of result object, creates if required, returns result...');
     a = [], b = [], r = [];
     old_arrays.push(a);
     old_arrays.push(b);
@@ -142,7 +167,7 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
     }
     a1_end_clock = Date.now();
 
-    print2('Testing in-house add2 function, does not create result, does not return...');
+    print2('(a2) Testing in-house add2 function, does not create result, does not return...');
     a = [], b = [], r = [];
     old_arrays.push(a);
     old_arrays.push(b);
@@ -169,6 +194,7 @@ require(['math.min', 'gladius', 'browser_detect'], function(m, g, browser_detect
     print('Testing complete, printing results.');
     print('m  diff: ' + (m_end_clock - m_start_clock) + 'ms');
     print('g  diff: ' + (g_end_clock - g_start_clock) + 'ms');
+    print('t  diff: ' + (t_end_clock - t_start_clock) + 'ms');
     print('a1 diff: ' + (a1_end_clock - a1_start_clock) + 'ms');
     print('a2 diff: ' + (a2_end_clock - a2_start_clock) + 'ms');
 });
